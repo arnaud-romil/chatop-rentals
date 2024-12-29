@@ -14,4 +14,8 @@ spring:
 
 jwt:
  private.key: classpath:app.key
- public.key: classpath:app.pub      
+ public.key: classpath:app.pub
+
+server:
+  servlet:
+    contextPath: /api       

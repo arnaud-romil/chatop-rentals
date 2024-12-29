@@ -27,7 +27,7 @@ public class JwtService {
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiry))
-                .subject(user.getName())
+                .subject(user.getEmail())
                 .claim("scope", "")
                 .build();
 
