@@ -1,9 +1,9 @@
-package com.chatop.rentalsapi.repositories;
+package com.chatop.rentalsapi.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.chatop.rentalsapi.models.User;
+import com.chatop.rentalsapi.model.entity.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {

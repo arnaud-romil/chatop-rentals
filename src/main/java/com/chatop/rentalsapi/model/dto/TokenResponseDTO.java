@@ -1,10 +1,10 @@
-package com.chatop.rentalsapi.models;
+package com.chatop.rentalsapi.model.dto;
 
-public class TokenResponse {
+public class TokenResponseDTO {
 
     private String token;
 
-    public TokenResponse(String tokenValue) {
+    public TokenResponseDTO(String tokenValue) {
         this.token = tokenValue;
     }
 

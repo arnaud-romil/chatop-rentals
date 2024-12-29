@@ -1,4 +1,4 @@
-package com.chatop.rentalsapi.configurations;
+package com.chatop.rentalsapi.config;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;

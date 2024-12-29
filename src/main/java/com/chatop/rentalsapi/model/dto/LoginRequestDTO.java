@@ -1,6 +1,6 @@
-package com.chatop.rentalsapi.models;
+package com.chatop.rentalsapi.model.dto;
 
-public class LoginRequest {
+public class LoginRequestDTO {
 
     private String login;
     private String password;

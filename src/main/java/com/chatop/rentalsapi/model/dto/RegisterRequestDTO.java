@@ -1,6 +1,6 @@
-package com.chatop.rentalsapi.models;
+package com.chatop.rentalsapi.model.dto;
 
-public class RegisterRequest {
+public class RegisterRequestDTO {
 
     private String email;
     private String name;
