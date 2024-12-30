@@ -60,9 +60,9 @@ public class AuthController {
     @Operation(summary = "Returns informations of the authenticated user", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<UserResponseDTO> me(Authentication authentication) {
         ResponseEntity<UserResponseDTO> result;
-        Optional<UserResponseDTO> userOptional = userService.findUserByEmail(authentication.getName());
-        if (userOptional.isPresent()) {
-            result = ResponseEntity.ok().body(userOptional.get());
+        User user = userService.findByEmail(authentication.getName());
+        if (user != null) {
+            result = ResponseEntity.ok().body(new UserResponseDTO(user));
         } else {
             result = ResponseEntity.status(401).build();
         }
