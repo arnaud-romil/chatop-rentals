@@ -45,7 +45,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Authenticates a user")
-    public ResponseEntity<TokenResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
+    public ResponseEntity<TokenResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
         ResponseEntity<TokenResponseDTO> result;
         Optional<User> user = userService.login(loginRequest);
         if (user.isPresent()) {
