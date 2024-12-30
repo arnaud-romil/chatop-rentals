@@ -5,7 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.util.Optional;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,12 +55,30 @@ public class RentalService {
         }
     }
 
+    public Optional<Rental> findById(Long requestedRentalId) {
+        return rentalRepository.findById(requestedRentalId);
+    }
+
     private String storePicture(MultipartFile picture) throws IOException {
 
         String fileName = System.currentTimeMillis() + "_" + picture.getOriginalFilename();
         Path destination = storageLocation.resolve(fileName);
         Files.copy(picture.getInputStream(), destination);
         return fileName;
+    }
+
+    public Resource servePicture(String fileName) {
+        Resource result = null;
+        try {
+            Path filePath = storageLocation.resolve(fileName);
+            Resource resource = new UrlResource(filePath.toUri());
+            if ((resource.exists() && resource.isReadable())) {
+                result = resource;
+            }
+        } catch (Exception ex) {
+            result = null;
+        }
+        return result;
     }
 
 }

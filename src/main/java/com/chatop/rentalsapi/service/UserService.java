@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.chatop.rentalsapi.model.dto.LoginRequestDTO;
 import com.chatop.rentalsapi.model.dto.RegisterRequestDTO;
-import com.chatop.rentalsapi.model.dto.UserResponseDTO;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.repository.UserRepository;
 
@@ -39,17 +38,6 @@ public class UserService {
         User user = userRepository.findByEmail(loginRequest.getLogin());
         if (user != null && isPasswordCorrect(user, loginRequest)) {
             result = Optional.of(user);
-        } else {
-            result = Optional.empty();
-        }
-        return result;
-    }
-
-    public Optional<UserResponseDTO> findUserByEmail(String email) {
-        Optional<UserResponseDTO> result;
-        User user = this.userRepository.findByEmail(email);
-        if (user != null) {
-            result = Optional.of(new UserResponseDTO(user));
         } else {
             result = Optional.empty();
         }
