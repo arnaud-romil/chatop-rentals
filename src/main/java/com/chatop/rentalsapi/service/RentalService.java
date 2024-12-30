@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.chatop.rentalsapi.model.dto.RentalCreationDTO;
+import com.chatop.rentalsapi.model.dto.RentalListResponseDTO;
+import com.chatop.rentalsapi.model.dto.RentalResponseDTO;
 import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.repository.RentalRepository;
@@ -32,7 +36,6 @@ public class RentalService {
     }
 
     public Rental createRental(RentalCreationDTO rentalCreation, String owner) {
-
         try {
             final Instant now = Instant.now();
             User user = userService.findByEmail(owner);
@@ -59,14 +62,6 @@ public class RentalService {
         return rentalRepository.findById(requestedRentalId);
     }
 
-    private String storePicture(MultipartFile picture) throws IOException {
-
-        String fileName = System.currentTimeMillis() + "_" + picture.getOriginalFilename();
-        Path destination = storageLocation.resolve(fileName);
-        Files.copy(picture.getInputStream(), destination);
-        return fileName;
-    }
-
     public Resource servePicture(String fileName) {
         Resource result = null;
         try {
@@ -79,6 +74,20 @@ public class RentalService {
             result = null;
         }
         return result;
+    }
+
+    public RentalListResponseDTO findAll() {
+        return new RentalListResponseDTO(
+                StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
+                        .map(rental -> new RentalResponseDTO(rental))
+                        .collect(Collectors.toList()));
+    }
+
+    private String storePicture(MultipartFile picture) throws IOException {
+        String fileName = System.currentTimeMillis() + "_" + picture.getOriginalFilename();
+        Path destination = storageLocation.resolve(fileName);
+        Files.copy(picture.getInputStream(), destination);
+        return fileName;
     }
 
 }
