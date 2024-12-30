@@ -54,7 +54,6 @@ public class UserService {
             result = Optional.empty();
         }
         return result;
-
     }
 
     private User saveUser(User user) {

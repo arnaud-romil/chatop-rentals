@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chatop.rentalsapi.model.dto.LoginRequestDTO;
@@ -17,7 +18,14 @@ import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.service.UserService;
 import com.chatop.rentalsapi.util.JwtUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 @RestController
+@RequestMapping("/auth")
+@Tag(name = "Auth Controller", description = "Authentication APIs")
 public class AuthController {
 
     private final UserService userService;
@@ -28,13 +36,15 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/auth/register")
-    public TokenResponseDTO register(@RequestBody RegisterRequestDTO registerRequest) {
+    @PostMapping("/register")
+    @Operation(summary = "Creates a new user")
+    public TokenResponseDTO register(@Valid @RequestBody RegisterRequestDTO registerRequest) {
         User user = userService.registerUser(registerRequest);
         return jwtService.generateToken(user);
     }
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
+    @Operation(summary = "Authenticates a user")
     public ResponseEntity<TokenResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
         ResponseEntity<TokenResponseDTO> result;
         Optional<User> user = userService.login(loginRequest);
@@ -46,7 +56,8 @@ public class AuthController {
         return result;
     }
 
-    @GetMapping("/auth/me")
+    @GetMapping("/me")
+    @Operation(summary = "Returns informations of the authenticated user", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<UserResponseDTO> me(Authentication authentication) {
         ResponseEntity<UserResponseDTO> result;
         Optional<UserResponseDTO> userOptional = userService.findUserByEmail(authentication.getName());
