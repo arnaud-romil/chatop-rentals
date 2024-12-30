@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.chatop.rentalsapi.model.dto.MessageResponseDTO;
 import com.chatop.rentalsapi.model.dto.RentalCreationDTO;
+import com.chatop.rentalsapi.model.dto.RentalListResponseDTO;
 import com.chatop.rentalsapi.model.dto.RentalResponseDTO;
 import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.service.RentalService;
@@ -63,7 +64,15 @@ public class RentalController {
         return result;
     }
 
+    @GetMapping
+    @Operation(summary = "Returns all rentals")
+    public ResponseEntity<RentalListResponseDTO> getAllRentals() {
+        RentalListResponseDTO rentals = rentalService.findAll();
+        return ResponseEntity.ok().body(rentals);
+    }
+
     @GetMapping("/pictures/{fileName}")
+    @Operation(summary = "Returns the picture of a rental")
     public ResponseEntity<Resource> servePicture(@PathVariable String fileName) {
         ResponseEntity<Resource> result;
         Resource resource = rentalService.servePicture(fileName);
