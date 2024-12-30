@@ -1,4 +1,4 @@
-package com.chatop.rentalsapi.services;
+package com.chatop.rentalsapi.service;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -6,10 +6,11 @@ import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.chatop.rentalsapi.models.LoginRequest;
-import com.chatop.rentalsapi.models.RegisterRequest;
-import com.chatop.rentalsapi.models.User;
-import com.chatop.rentalsapi.repositories.UserRepository;
+import com.chatop.rentalsapi.model.dto.LoginRequestDTO;
+import com.chatop.rentalsapi.model.dto.RegisterRequestDTO;
+import com.chatop.rentalsapi.model.dto.UserResponseDTO;
+import com.chatop.rentalsapi.model.entity.User;
+import com.chatop.rentalsapi.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -23,11 +24,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    private User saveUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public User registerUser(RegisterRequest registerRequest) {
+    public User registerUser(RegisterRequestDTO registerRequest) {
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setName(registerRequest.getName());
@@ -37,7 +34,7 @@ public class UserService {
         return saveUser(user);
     }
 
-    public Optional<User> login(LoginRequest loginRequest) {
+    public Optional<User> login(LoginRequestDTO loginRequest) {
         Optional<User> result;
         User user = userRepository.findByEmail(loginRequest.getLogin());
         if (user != null && isPasswordCorrect(user, loginRequest)) {
@@ -48,7 +45,22 @@ public class UserService {
         return result;
     }
 
-    private boolean isPasswordCorrect(User user, LoginRequest loginRequest) {
+    public Optional<UserResponseDTO> findUserByEmail(String email) {
+        Optional<UserResponseDTO> result;
+        User user = this.userRepository.findByEmail(email);
+        if (user != null) {
+            result = Optional.of(new UserResponseDTO(user));
+        } else {
+            result = Optional.empty();
+        }
+        return result;
+    }
+
+    private User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    private boolean isPasswordCorrect(User user, LoginRequestDTO loginRequest) {
         return this.passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
     }
 }

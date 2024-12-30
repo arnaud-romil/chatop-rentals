@@ -1,8 +1,12 @@
-package com.chatop.rentalsapi.models;
+package com.chatop.rentalsapi.model.dto;
 
-public class LoginRequest {
+import jakarta.validation.constraints.NotNull;
 
+public class LoginRequestDTO {
+
+    @NotNull
     private String login;
+    @NotNull
     private String password;
 
     public String getLogin() {

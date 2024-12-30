@@ -1,4 +1,4 @@
-package com.chatop.rentalsapi.models;
+package com.chatop.rentalsapi.model.entity;
 
 import java.time.Instant;
 
