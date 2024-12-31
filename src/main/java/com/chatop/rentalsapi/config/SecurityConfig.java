@@ -49,6 +49,9 @@ public class SecurityConfig {
                             "/auth/register",
                             "/auth/login")
                             .permitAll();
+                    authorize.requestMatchers(
+                            "/rentals/pictures/**")
+                            .permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));

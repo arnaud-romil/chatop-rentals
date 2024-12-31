@@ -2,10 +2,18 @@ package com.chatop.rentalsapi.model.dto.request;
 
 import java.math.BigDecimal;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class RentalUpdateRequestDTO {
 
+    @NotNull
     private String name;
+    @NotNull
+    @Positive
     private BigDecimal surface;
+    @NotNull
+    @Positive
     private BigDecimal price;
     private String description;
 
