@@ -35,7 +35,7 @@ public class UserService {
 
     public Optional<User> login(LoginRequestDTO loginRequest) {
         Optional<User> result;
-        User user = userRepository.findByEmail(loginRequest.getLogin());
+        User user = userRepository.findByEmail(loginRequest.getEmail());
         if (user != null && isPasswordCorrect(user, loginRequest)) {
             result = Optional.of(user);
         } else {

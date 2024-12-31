@@ -4,11 +4,18 @@ import java.math.BigDecimal;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class RentalCreationRequestDTO {
 
-    // TODO Add Validators
+    @NotNull
     private String name;
+    @NotNull
+    @Positive
     private BigDecimal surface;
+    @NotNull
+    @Positive
     private BigDecimal price;
     private MultipartFile picture;
     private String description;
