@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chatop.rentalsapi.model.dto.request.RentalCreationRequestDTO;
+import com.chatop.rentalsapi.model.dto.request.RentalUpdateRequestDTO;
 import com.chatop.rentalsapi.model.dto.response.MessageResponseDTO;
 import com.chatop.rentalsapi.model.dto.response.RentalListResponseDTO;
 import com.chatop.rentalsapi.model.dto.response.RentalResponseDTO;
@@ -45,10 +47,25 @@ public class RentalController {
         Rental rental = rentalService.createRental(rentalCreation, authentication.getName());
         if (rental != null) {
             result = ResponseEntity.ok().body(new MessageResponseDTO("Rental created !"));
-
         } else {
             result = ResponseEntity.status(401).build();
         }
+        return result;
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Updates a rental")
+    public ResponseEntity<MessageResponseDTO> update(@Valid @ModelAttribute RentalUpdateRequestDTO rentalUpdate,
+            @PathVariable Long id,
+            Authentication authentication) {
+        ResponseEntity<MessageResponseDTO> result;
+        Rental rental = rentalService.updateRental(rentalUpdate, id, authentication.getName());
+        if (rental != null) {
+            result = ResponseEntity.ok().body(new MessageResponseDTO("Rental updated !"));
+        } else {
+            result = ResponseEntity.status(401).build();
+        }
+
         return result;
     }
 

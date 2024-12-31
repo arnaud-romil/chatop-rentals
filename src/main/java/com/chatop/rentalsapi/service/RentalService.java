@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.chatop.rentalsapi.model.dto.request.RentalCreationRequestDTO;
+import com.chatop.rentalsapi.model.dto.request.RentalUpdateRequestDTO;
 import com.chatop.rentalsapi.model.dto.response.RentalListResponseDTO;
 import com.chatop.rentalsapi.model.dto.response.RentalResponseDTO;
 import com.chatop.rentalsapi.model.entity.Rental;
@@ -83,11 +84,26 @@ public class RentalService {
                         .collect(Collectors.toList()));
     }
 
+    public Rental updateRental(RentalUpdateRequestDTO rentalUpdate, Long id, String ownerEmail) {
+        Rental result = null;
+        User owner = userService.findByEmail(ownerEmail);
+        Optional<Rental> rentalOptional = rentalRepository.findByIdAndUserId(id, owner.getId());
+        if (rentalOptional.isPresent()) {
+            result = rentalOptional.get();
+            result.setName(rentalUpdate.getName());
+            result.setSurface(rentalUpdate.getSurface());
+            result.setPrice(rentalUpdate.getPrice());
+            result.setDescription(rentalUpdate.getDescription());
+            result.setUpdatedAt(Instant.now());
+            result = rentalRepository.save(result);
+        }
+        return result;
+    }
+
     private String storePicture(MultipartFile picture) throws IOException {
         String fileName = System.currentTimeMillis() + "_" + picture.getOriginalFilename();
         Path destination = storageLocation.resolve(fileName);
         Files.copy(picture.getInputStream(), destination);
         return fileName;
     }
-
 }

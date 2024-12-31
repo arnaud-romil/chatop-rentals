@@ -2,15 +2,11 @@ package com.chatop.rentalsapi.model.dto.request;
 
 import java.math.BigDecimal;
 
-import org.springframework.web.multipart.MultipartFile;
+public class RentalUpdateRequestDTO {
 
-public class RentalCreationRequestDTO {
-
-    // TODO Add Validators
     private String name;
     private BigDecimal surface;
     private BigDecimal price;
-    private MultipartFile picture;
     private String description;
 
     public String getName() {
@@ -37,14 +33,6 @@ public class RentalCreationRequestDTO {
         this.price = price;
     }
 
-    public MultipartFile getPicture() {
-        return picture;
-    }
-
-    public void setPicture(MultipartFile picture) {
-        this.picture = picture;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -52,5 +40,4 @@ public class RentalCreationRequestDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-
 }
