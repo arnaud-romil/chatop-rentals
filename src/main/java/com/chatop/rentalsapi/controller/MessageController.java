@@ -11,6 +11,7 @@ import com.chatop.rentalsapi.model.dto.response.MessageResponseDTO;
 import com.chatop.rentalsapi.service.MessageService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -26,7 +27,7 @@ public class MessageController {
     }
 
     @PostMapping
-    @Operation(summary = "Creates a new message")
+    @Operation(summary = "Creates a new message", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<MessageResponseDTO> createMessage(
             @Valid @RequestBody MessageCreationRequestDTO messageCreationRequest) {
 
