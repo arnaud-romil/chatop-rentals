@@ -14,9 +14,9 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.chatop.rentalsapi.model.dto.RentalCreationDTO;
-import com.chatop.rentalsapi.model.dto.RentalListResponseDTO;
-import com.chatop.rentalsapi.model.dto.RentalResponseDTO;
+import com.chatop.rentalsapi.model.dto.request.RentalCreationRequestDTO;
+import com.chatop.rentalsapi.model.dto.response.RentalListResponseDTO;
+import com.chatop.rentalsapi.model.dto.response.RentalResponseDTO;
 import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.repository.RentalRepository;
@@ -35,7 +35,7 @@ public class RentalService {
         this.rentalRepository = rentalRepository;
     }
 
-    public Rental createRental(RentalCreationDTO rentalCreation, String owner) {
+    public Rental createRental(RentalCreationRequestDTO rentalCreation, String owner) {
         try {
             final Instant now = Instant.now();
             User user = userService.findByEmail(owner);

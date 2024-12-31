@@ -1,10 +1,10 @@
-package com.chatop.rentalsapi.model.dto;
+package com.chatop.rentalsapi.model.dto.request;
 
 import java.math.BigDecimal;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class RentalCreationDTO {
+public class RentalCreationRequestDTO {
 
     private String name;
     private BigDecimal surface;
