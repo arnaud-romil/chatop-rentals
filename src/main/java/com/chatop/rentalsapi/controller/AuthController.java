@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chatop.rentalsapi.model.dto.LoginRequestDTO;
-import com.chatop.rentalsapi.model.dto.RegisterRequestDTO;
-import com.chatop.rentalsapi.model.dto.TokenResponseDTO;
-import com.chatop.rentalsapi.model.dto.UserResponseDTO;
+import com.chatop.rentalsapi.model.dto.request.LoginRequestDTO;
+import com.chatop.rentalsapi.model.dto.request.RegisterRequestDTO;
+import com.chatop.rentalsapi.model.dto.response.TokenResponseDTO;
+import com.chatop.rentalsapi.model.dto.response.UserResponseDTO;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.service.UserService;
 import com.chatop.rentalsapi.util.JwtUtil;

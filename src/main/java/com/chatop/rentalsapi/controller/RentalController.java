@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chatop.rentalsapi.model.dto.MessageResponseDTO;
-import com.chatop.rentalsapi.model.dto.RentalCreationDTO;
-import com.chatop.rentalsapi.model.dto.RentalListResponseDTO;
-import com.chatop.rentalsapi.model.dto.RentalResponseDTO;
+import com.chatop.rentalsapi.model.dto.request.RentalCreationRequestDTO;
+import com.chatop.rentalsapi.model.dto.response.MessageResponseDTO;
+import com.chatop.rentalsapi.model.dto.response.RentalListResponseDTO;
+import com.chatop.rentalsapi.model.dto.response.RentalResponseDTO;
 import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.service.RentalService;
 
@@ -38,7 +38,7 @@ public class RentalController {
 
     @PostMapping(consumes = { "multipart/form-data" })
     @Operation(summary = "Creates a new rental")
-    public ResponseEntity<MessageResponseDTO> create(@Valid @ModelAttribute RentalCreationDTO rentalCreation,
+    public ResponseEntity<MessageResponseDTO> create(@Valid @ModelAttribute RentalCreationRequestDTO rentalCreation,
             Authentication authentication) {
         ResponseEntity<MessageResponseDTO> result;
         Rental rental = rentalService.createRental(rentalCreation, authentication.getName());

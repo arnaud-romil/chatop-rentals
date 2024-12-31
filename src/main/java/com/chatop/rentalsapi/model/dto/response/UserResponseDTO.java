@@ -1,4 +1,4 @@
-package com.chatop.rentalsapi.model.dto;
+package com.chatop.rentalsapi.model.dto.response;
 
 import java.time.Instant;
 

@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.chatop.rentalsapi.model.dto.LoginRequestDTO;
-import com.chatop.rentalsapi.model.dto.RegisterRequestDTO;
+import com.chatop.rentalsapi.model.dto.request.LoginRequestDTO;
+import com.chatop.rentalsapi.model.dto.request.RegisterRequestDTO;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.repository.UserRepository;
 
@@ -54,5 +54,9 @@ public class UserService {
 
     private boolean isPasswordCorrect(User user, LoginRequestDTO loginRequest) {
         return this.passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
+    }
+
+    public Optional<User> findById(Long userId) {
+        return this.userRepository.findById(userId);
     }
 }
