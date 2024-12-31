@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chatop.rentalsapi.model.dto.MessageResponseDTO;
-import com.chatop.rentalsapi.model.dto.RentalCreationDTO;
+import com.chatop.rentalsapi.model.dto.RentalCreationRequestDTO;
 import com.chatop.rentalsapi.model.dto.RentalListResponseDTO;
 import com.chatop.rentalsapi.model.dto.RentalResponseDTO;
+import com.chatop.rentalsapi.model.dto.RentalUpdateRequestDTO;
 import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.service.RentalService;
 
@@ -38,16 +40,32 @@ public class RentalController {
 
     @PostMapping(consumes = { "multipart/form-data" })
     @Operation(summary = "Creates a new rental")
-    public ResponseEntity<MessageResponseDTO> create(@Valid @ModelAttribute RentalCreationDTO rentalCreation,
+    public ResponseEntity<MessageResponseDTO> create(
+            @Valid @ModelAttribute RentalCreationRequestDTO rentalCreation,
             Authentication authentication) {
         ResponseEntity<MessageResponseDTO> result;
         Rental rental = rentalService.createRental(rentalCreation, authentication.getName());
         if (rental != null) {
             result = ResponseEntity.ok().body(new MessageResponseDTO("Rental created !"));
-
         } else {
             result = ResponseEntity.status(401).build();
         }
+        return result;
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Updates a rental")
+    public ResponseEntity<MessageResponseDTO> update(@Valid @ModelAttribute RentalUpdateRequestDTO rentalUpdate,
+            @PathVariable Long id,
+            Authentication authentication) {
+        ResponseEntity<MessageResponseDTO> result;
+        Rental rental = rentalService.updateRental(rentalUpdate, id, authentication.getName());
+        if (rental != null) {
+            result = ResponseEntity.ok().body(new MessageResponseDTO("Rental updated !"));
+        } else {
+            result = ResponseEntity.status(401).build();
+        }
+
         return result;
     }
 

@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class RentalCreationDTO {
+public class RentalCreationRequestDTO {
 
+    // TODO Add Validators
     private String name;
     private BigDecimal surface;
     private BigDecimal price;

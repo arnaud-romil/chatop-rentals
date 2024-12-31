@@ -14,9 +14,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.chatop.rentalsapi.model.dto.RentalCreationDTO;
+import com.chatop.rentalsapi.model.dto.RentalCreationRequestDTO;
 import com.chatop.rentalsapi.model.dto.RentalListResponseDTO;
 import com.chatop.rentalsapi.model.dto.RentalResponseDTO;
+import com.chatop.rentalsapi.model.dto.RentalUpdateRequestDTO;
 import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.repository.RentalRepository;
@@ -35,7 +36,7 @@ public class RentalService {
         this.rentalRepository = rentalRepository;
     }
 
-    public Rental createRental(RentalCreationDTO rentalCreation, String owner) {
+    public Rental createRental(RentalCreationRequestDTO rentalCreation, String owner) {
         try {
             final Instant now = Instant.now();
             User user = userService.findByEmail(owner);
@@ -83,11 +84,26 @@ public class RentalService {
                         .collect(Collectors.toList()));
     }
 
+    public Rental updateRental(RentalUpdateRequestDTO rentalUpdate, Long id, String ownerEmail) {
+        Rental result = null;
+        User owner = userService.findByEmail(ownerEmail);
+        Optional<Rental> rentalOptional = rentalRepository.findByIdAndUserId(id, owner.getId());
+        if (rentalOptional.isPresent()) {
+            result = rentalOptional.get();
+            result.setName(rentalUpdate.getName());
+            result.setSurface(rentalUpdate.getSurface());
+            result.setPrice(rentalUpdate.getPrice());
+            result.setDescription(rentalUpdate.getDescription());
+            result.setUpdatedAt(Instant.now());
+            result = rentalRepository.save(result);
+        }
+        return result;
+    }
+
     private String storePicture(MultipartFile picture) throws IOException {
         String fileName = System.currentTimeMillis() + "_" + picture.getOriginalFilename();
         Path destination = storageLocation.resolve(fileName);
         Files.copy(picture.getInputStream(), destination);
         return fileName;
     }
-
 }
