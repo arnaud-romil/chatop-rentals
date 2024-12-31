@@ -22,6 +22,7 @@ import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.service.RentalService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -37,7 +38,7 @@ public class RentalController {
     }
 
     @PostMapping(consumes = { "multipart/form-data" })
-    @Operation(summary = "Creates a new rental")
+    @Operation(summary = "Creates a new rental", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<MessageResponseDTO> create(@Valid @ModelAttribute RentalCreationRequestDTO rentalCreation,
             Authentication authentication) {
         ResponseEntity<MessageResponseDTO> result;
@@ -52,7 +53,7 @@ public class RentalController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Returns the requested rental")
+    @Operation(summary = "Returns the requested rental", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<RentalResponseDTO> getRental(@PathVariable Long id) {
         ResponseEntity<RentalResponseDTO> result;
         Optional<Rental> rentalOptional = rentalService.findById(id);
@@ -65,7 +66,7 @@ public class RentalController {
     }
 
     @GetMapping
-    @Operation(summary = "Returns all rentals")
+    @Operation(summary = "Returns all rentals", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<RentalListResponseDTO> getAllRentals() {
         RentalListResponseDTO rentals = rentalService.findAll();
         return ResponseEntity.ok().body(rentals);
