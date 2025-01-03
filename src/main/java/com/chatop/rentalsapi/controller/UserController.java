@@ -14,12 +14,16 @@ import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/user")
-@Tag(name = "User Controller", description = "User APIs")
+@Tag(name = "User Controller", description = "Endpoints for managing users")
 public class UserController {
 
     private final UserService userService;
@@ -29,8 +33,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @Operation(summary = "Returns informations of the authenticated user", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long userId) {
+    @Operation(summary = "Get user by ID", description = "Retrieves details of a user by their unique ID", responses = {
+            @ApiResponse(responseCode = "200", description = "User found", content = @Content(schema = @Schema(implementation = UserResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "User is unauthorized", content = @Content())
+    }, security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<UserResponseDTO> getUser(
+            @Parameter(description = "ID of the requested user") @PathVariable Long userId) {
         ResponseEntity<UserResponseDTO> result;
         Optional<User> userOptional = userService.findById(userId);
         if (userOptional.isPresent()) {

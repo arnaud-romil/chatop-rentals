@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+@Schema(description = "Data transfer object representing a user's request to create a new rental")
 public class RentalCreationRequestDTO {
 
     @NotBlank

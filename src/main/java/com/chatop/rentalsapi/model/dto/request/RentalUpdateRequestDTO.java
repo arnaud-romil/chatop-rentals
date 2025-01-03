@@ -2,10 +2,12 @@ package com.chatop.rentalsapi.model.dto.request;
 
 import java.math.BigDecimal;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+@Schema(description = "Data transfer object representing a user's request to update a rental")
 public class RentalUpdateRequestDTO {
 
     @NotBlank
