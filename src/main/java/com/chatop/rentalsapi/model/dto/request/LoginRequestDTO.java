@@ -1,7 +1,9 @@
 package com.chatop.rentalsapi.model.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
+@Schema(description = "Data transfer object representing a loging request by a user.")
 public class LoginRequestDTO {
 
     @NotBlank
