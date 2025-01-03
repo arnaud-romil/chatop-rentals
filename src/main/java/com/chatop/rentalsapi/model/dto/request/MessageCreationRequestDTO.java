@@ -2,11 +2,12 @@ package com.chatop.rentalsapi.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class MessageCreationRequestDTO {
 
-    @NotNull
+    @NotBlank
     private String message;
     @NotNull
     @JsonProperty("user_id")
