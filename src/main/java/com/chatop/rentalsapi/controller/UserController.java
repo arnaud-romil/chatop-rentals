@@ -2,6 +2,7 @@ package com.chatop.rentalsapi.controller;
 
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +36,7 @@ public class UserController {
         if (userOptional.isPresent()) {
             result = ResponseEntity.ok().body(new UserResponseDTO(userOptional.get()));
         } else {
-            result = ResponseEntity.status(401).build();
+            result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return result;
     }

@@ -24,7 +24,8 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    private String message;
+    @Column(name = "message")
+    private String value;
     @Column(name = "created_at")
     private Instant createdAt;
     @Column(name = "updated_at")
@@ -54,12 +55,12 @@ public class Message {
         this.user = user;
     }
 
-    public String getMessage() {
-        return message;
+    public String getValue() {
+        return value;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setValue(String message) {
+        this.value = message;
     }
 
     public Instant getCreatedAt() {

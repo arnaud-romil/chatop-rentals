@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.core.io.Resource;
@@ -80,8 +79,8 @@ public class RentalService {
     public RentalListResponseDTO findAll() {
         return new RentalListResponseDTO(
                 StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-                        .map(rental -> new RentalResponseDTO(rental))
-                        .collect(Collectors.toList()));
+                        .map(RentalResponseDTO::new)
+                        .toList());
     }
 
     public Rental updateRental(RentalUpdateRequestDTO rentalUpdate, Long id, String ownerEmail) {
