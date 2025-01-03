@@ -48,6 +48,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public Optional<User> findById(Long userId) {
+        return this.userRepository.findById(userId);
+    }
+
     private User saveUser(User user) {
         return userRepository.save(user);
     }
@@ -56,7 +60,4 @@ public class UserService {
         return this.passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
     }
 
-    public Optional<User> findById(Long userId) {
-        return this.userRepository.findById(userId);
-    }
 }

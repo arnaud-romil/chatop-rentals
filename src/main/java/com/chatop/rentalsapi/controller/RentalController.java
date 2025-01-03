@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -48,7 +49,7 @@ public class RentalController {
         if (rental != null) {
             result = ResponseEntity.ok().body(new MessageResponseDTO("Rental created !"));
         } else {
-            result = ResponseEntity.status(401).build();
+            result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return result;
     }
@@ -63,7 +64,7 @@ public class RentalController {
         if (rental != null) {
             result = ResponseEntity.ok().body(new MessageResponseDTO("Rental updated !"));
         } else {
-            result = ResponseEntity.status(401).build();
+            result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         return result;
@@ -77,7 +78,7 @@ public class RentalController {
         if (rentalOptional.isPresent()) {
             result = ResponseEntity.ok().body(new RentalResponseDTO(rentalOptional.get()));
         } else {
-            result = ResponseEntity.status(401).build();
+            result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return result;
     }

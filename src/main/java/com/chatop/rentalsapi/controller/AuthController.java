@@ -2,6 +2,7 @@ package com.chatop.rentalsapi.controller;
 
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +52,7 @@ public class AuthController {
         if (user.isPresent()) {
             result = ResponseEntity.ok(jwtService.generateToken(user.get()));
         } else {
-            result = ResponseEntity.status(401).build();
+            result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return result;
     }
@@ -64,7 +65,7 @@ public class AuthController {
         if (user != null) {
             result = ResponseEntity.ok().body(new UserResponseDTO(user));
         } else {
-            result = ResponseEntity.status(401).build();
+            result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return result;
     }

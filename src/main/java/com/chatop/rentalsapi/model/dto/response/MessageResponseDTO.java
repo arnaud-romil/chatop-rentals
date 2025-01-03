@@ -2,7 +2,7 @@ package com.chatop.rentalsapi.model.dto.response;
 
 public class MessageResponseDTO {
 
-    private String message;
+    private final String message;
 
     public MessageResponseDTO(String message) {
         this.message = message;

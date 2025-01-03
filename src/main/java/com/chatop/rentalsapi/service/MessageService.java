@@ -31,7 +31,7 @@ public class MessageService {
         Optional<Rental> rentalOptional = rentalService.findById(messageCreationRequest.getRentalId());
         if (userOptional.isPresent() && rentalOptional.isPresent()) {
             Message message = new Message();
-            message.setMessage(messageCreationRequest.getMessage());
+            message.setValue(messageCreationRequest.getMessage());
             message.setUser(userOptional.get());
             message.setRental(rentalOptional.get());
             message.setCreatedAt(now);

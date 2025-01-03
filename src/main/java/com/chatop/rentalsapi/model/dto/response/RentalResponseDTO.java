@@ -10,18 +10,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RentalResponseDTO {
 
-    private Long id;
-    private String name;
-    private BigDecimal surface;
-    private BigDecimal price;
-    private String picture;
-    private String description;
+    private final Long id;
+    private final String name;
+    private final BigDecimal surface;
+    private final BigDecimal price;
+    private final String picture;
+    private final String description;
     @JsonProperty("owner_id")
-    private Long ownerId;
+    private final Long ownerId;
     @JsonProperty("created_at")
-    private Instant createdAt;
+    private final Instant createdAt;
     @JsonProperty("updated_at")
-    private Instant updatedAt;
+    private final Instant updatedAt;
 
     public RentalResponseDTO(Rental rental) {
         this.id = rental.getId();

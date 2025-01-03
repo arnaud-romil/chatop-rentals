@@ -4,7 +4,7 @@ import java.util.List;
 
 public class RentalListResponseDTO {
 
-    private List<RentalResponseDTO> rentals;
+    private final List<RentalResponseDTO> rentals;
 
     public RentalListResponseDTO(List<RentalResponseDTO> rentals) {
         this.rentals = rentals;

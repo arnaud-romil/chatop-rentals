@@ -1,16 +1,16 @@
 package com.chatop.rentalsapi.model.dto.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public class RegisterRequestDTO {
 
     @Email
-    @NotNull
+    @NotBlank
     private String email;
-    @NotNull
+    @NotBlank
     private String name;
-    @NotNull
+    @NotBlank
     private String password;
 
     public String getEmail() {

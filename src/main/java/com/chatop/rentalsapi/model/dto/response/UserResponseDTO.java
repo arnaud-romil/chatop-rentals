@@ -7,6 +7,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserResponseDTO {
 
+    private final Long id;
+    private final String email;
+    private final String name;
+    @JsonProperty("created_at")
+    private final Instant createdAt;
+    @JsonProperty("updated_at")
+    private final Instant updatedAt;
+
     public UserResponseDTO(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
@@ -14,14 +22,6 @@ public class UserResponseDTO {
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
     }
-
-    private Long id;
-    private String email;
-    private String name;
-    @JsonProperty("created_at")
-    private Instant createdAt;
-    @JsonProperty("updated_at")
-    private Instant updatedAt;
 
     public Long getId() {
         return id;
