@@ -1,5 +1,7 @@
 package com.chatop.rentalsapi.service;
 
+import com.chatop.rentalsapi.exception.DatabaseException;
+import com.chatop.rentalsapi.exception.InvalidDataException;
 import com.chatop.rentalsapi.model.dto.request.MessageCreationRequestDTO;
 import com.chatop.rentalsapi.model.entity.Message;
 import com.chatop.rentalsapi.model.entity.Rental;
@@ -35,9 +37,24 @@ public class MessageService {
       message.setRental(rentalOptional.get());
       message.setCreatedAt(now);
       message.setUpdatedAt(now);
-      messageRepository.save(message);
+      saveMessage(message);
     } else {
-      throw new IllegalArgumentException();
+      StringBuilder errorMessage = new StringBuilder("Could not find:");
+      if (userOptional.isEmpty()) {
+        errorMessage.append(" - user with id: " + messageCreationRequest.getUserId());
+      }
+      if (rentalOptional.isEmpty()) {
+        errorMessage.append(" - rental with id: " + messageCreationRequest.getRentalId());
+      }
+      throw new InvalidDataException(errorMessage.toString());
+    }
+  }
+
+  private Message saveMessage(Message message) {
+    try {
+      return messageRepository.save(message);
+    } catch (Exception ex) {
+      throw new DatabaseException(ex);
     }
   }
 }

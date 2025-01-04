@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 @Schema(description = "Data transfer object representing a request to register a new user")
 public class RegisterRequestDTO {
 
-  @Email @NotBlank private String email;
+  @NotBlank @Email private String email;
   @NotBlank private String name;
   @NotBlank private String password;
 

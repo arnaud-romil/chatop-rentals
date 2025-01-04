@@ -50,9 +50,10 @@ public class AuthController {
             content = @Content(schema = @Schema(implementation = TokenResponseDTO.class))),
         @ApiResponse(responseCode = "400", description = "Bad request", content = @Content())
       })
-  public TokenResponseDTO register(@Valid @RequestBody RegisterRequestDTO registerRequest) {
+  public ResponseEntity<TokenResponseDTO> register(
+      @Valid @RequestBody RegisterRequestDTO registerRequest) {
     User user = userService.registerUser(registerRequest);
-    return jwtService.generateToken(user);
+    return ResponseEntity.ok().body(jwtService.generateToken(user));
   }
 
   @PostMapping("/login")
