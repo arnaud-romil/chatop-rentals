@@ -1,11 +1,14 @@
 package com.chatop.rentalsapi.service;
 
+import com.chatop.rentalsapi.exception.DatabaseException;
+import com.chatop.rentalsapi.exception.InvalidDataException;
 import com.chatop.rentalsapi.model.dto.request.LoginRequestDTO;
 import com.chatop.rentalsapi.model.dto.request.RegisterRequestDTO;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.repository.UserRepository;
 import java.time.Instant;
 import java.util.Optional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +24,19 @@ public class UserService {
   }
 
   public User registerUser(RegisterRequestDTO registerRequest) {
+    final Instant now = Instant.now();
     User user = new User();
     user.setEmail(registerRequest.getEmail());
     user.setName(registerRequest.getName());
     user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-    user.setCreatedAt(Instant.now());
-    user.setUpdatedAt(Instant.now());
+    user.setCreatedAt(now);
+    user.setUpdatedAt(now);
     return saveUser(user);
   }
 
   public Optional<User> login(LoginRequestDTO loginRequest) {
     Optional<User> result;
-    User user = userRepository.findByEmail(loginRequest.getEmail());
+    User user = findByEmail(loginRequest.getEmail());
     if (user != null && isPasswordCorrect(user, loginRequest)) {
       result = Optional.of(user);
     } else {
@@ -42,15 +46,29 @@ public class UserService {
   }
 
   public User findByEmail(String email) {
-    return userRepository.findByEmail(email);
+    try {
+      return userRepository.findByEmail(email);
+    } catch (Exception ex) {
+      throw new DatabaseException(ex);
+    }
   }
 
   public Optional<User> findById(Long userId) {
-    return this.userRepository.findById(userId);
+    try {
+      return this.userRepository.findById(userId);
+    } catch (Exception ex) {
+      throw new DatabaseException(ex);
+    }
   }
 
   private User saveUser(User user) {
-    return userRepository.save(user);
+    try {
+      return userRepository.save(user);
+    } catch (DataIntegrityViolationException ex) {
+      throw new InvalidDataException("A user with this email already exists", ex);
+    } catch (Exception ex) {
+      throw new DatabaseException(ex);
+    }
   }
 
   private boolean isPasswordCorrect(User user, LoginRequestDTO loginRequest) {

@@ -146,7 +146,7 @@ public class RentalController {
       },
       security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<RentalListResponseDTO> getAllRentals() {
-    RentalListResponseDTO rentals = rentalService.findAll();
+    RentalListResponseDTO rentals = rentalService.findAllRentals();
     return ResponseEntity.ok().body(rentals);
   }
 

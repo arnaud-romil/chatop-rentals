@@ -1,5 +1,7 @@
 package com.chatop.rentalsapi.service;
 
+import com.chatop.rentalsapi.exception.DatabaseException;
+import com.chatop.rentalsapi.exception.PictureUploadException;
 import com.chatop.rentalsapi.model.dto.request.RentalCreationRequestDTO;
 import com.chatop.rentalsapi.model.dto.request.RentalUpdateRequestDTO;
 import com.chatop.rentalsapi.model.dto.response.RentalListResponseDTO;
@@ -7,7 +9,6 @@ import com.chatop.rentalsapi.model.dto.response.RentalResponseDTO;
 import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.repository.RentalRepository;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,38 +28,28 @@ public class RentalService {
 
   private final Path storageLocation = Paths.get("uploads");
 
-  public RentalService(UserService userService, RentalRepository rentalRepository)
-      throws IOException {
-    Files.createDirectories(storageLocation);
+  public RentalService(UserService userService, RentalRepository rentalRepository) {
     this.userService = userService;
     this.rentalRepository = rentalRepository;
   }
 
   public Rental createRental(RentalCreationRequestDTO rentalCreation, String owner) {
-    try {
-      final Instant now = Instant.now();
-      User user = userService.findByEmail(owner);
-      String picturePath = storePicture(rentalCreation.getPicture());
 
-      Rental rental = new Rental();
-      rental.setName(rentalCreation.getName());
-      rental.setSurface(rentalCreation.getSurface());
-      rental.setPrice(rentalCreation.getPrice());
-      rental.setPicture(picturePath);
-      rental.setDescription(rentalCreation.getDescription());
-      rental.setUser(user);
-      rental.setCreatedAt(now);
-      rental.setUpdatedAt(now);
+    final Instant now = Instant.now();
+    User user = userService.findByEmail(owner);
+    String picturePath = storePicture(rentalCreation.getPicture());
 
-      return rentalRepository.save(rental);
+    Rental rental = new Rental();
+    rental.setName(rentalCreation.getName());
+    rental.setSurface(rentalCreation.getSurface());
+    rental.setPrice(rentalCreation.getPrice());
+    rental.setPicture(picturePath);
+    rental.setDescription(rentalCreation.getDescription());
+    rental.setUser(user);
+    rental.setCreatedAt(now);
+    rental.setUpdatedAt(now);
 
-    } catch (Exception ex) {
-      return null;
-    }
-  }
-
-  public Optional<Rental> findById(Long requestedRentalId) {
-    return rentalRepository.findById(requestedRentalId);
+    return saveRental(rental);
   }
 
   public Resource servePicture(String fileName) {
@@ -75,33 +66,67 @@ public class RentalService {
     return result;
   }
 
-  public RentalListResponseDTO findAll() {
+  public RentalListResponseDTO findAllRentals() {
     return new RentalListResponseDTO(
-        StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-            .map(RentalResponseDTO::new)
-            .toList());
+        StreamSupport.stream(findAll().spliterator(), false).map(RentalResponseDTO::new).toList());
   }
 
   public Rental updateRental(RentalUpdateRequestDTO rentalUpdate, Long id, String ownerEmail) {
-    Rental result = null;
+    Rental rental = null;
     User owner = userService.findByEmail(ownerEmail);
-    Optional<Rental> rentalOptional = rentalRepository.findByIdAndUserId(id, owner.getId());
+    Optional<Rental> rentalOptional = findByIdAndUserId(id, owner.getId());
     if (rentalOptional.isPresent()) {
-      result = rentalOptional.get();
-      result.setName(rentalUpdate.getName());
-      result.setSurface(rentalUpdate.getSurface());
-      result.setPrice(rentalUpdate.getPrice());
-      result.setDescription(rentalUpdate.getDescription());
-      result.setUpdatedAt(Instant.now());
-      result = rentalRepository.save(result);
+      rental = rentalOptional.get();
+      rental.setName(rentalUpdate.getName());
+      rental.setSurface(rentalUpdate.getSurface());
+      rental.setPrice(rentalUpdate.getPrice());
+      rental.setDescription(rentalUpdate.getDescription());
+      rental.setUpdatedAt(Instant.now());
+      rental = saveRental(rental);
     }
-    return result;
+    return rental;
   }
 
-  private String storePicture(MultipartFile picture) throws IOException {
-    String fileName = System.currentTimeMillis() + "_" + picture.getOriginalFilename();
-    Path destination = storageLocation.resolve(fileName);
-    Files.copy(picture.getInputStream(), destination);
-    return fileName;
+  public Optional<Rental> findById(Long rentalId) {
+    try {
+      return rentalRepository.findById(rentalId);
+    } catch (Exception ex) {
+      throw new DatabaseException(ex);
+    }
+  }
+
+  private String storePicture(MultipartFile picture) {
+    try {
+      String fileName = System.currentTimeMillis() + "_" + picture.getOriginalFilename();
+      Path destination = storageLocation.resolve(fileName);
+      Files.copy(picture.getInputStream(), destination);
+      return fileName;
+    } catch (Exception ex) {
+      throw new PictureUploadException("Error occurred while uploading rental picture", ex);
+    }
+  }
+
+  private Iterable<Rental> findAll() {
+    try {
+      return rentalRepository.findAll();
+    } catch (Exception ex) {
+      throw new DatabaseException(ex);
+    }
+  }
+
+  private Optional<Rental> findByIdAndUserId(Long rentalId, Long ownerId) {
+    try {
+      return rentalRepository.findByIdAndUserId(rentalId, ownerId);
+    } catch (Exception ex) {
+      throw new DatabaseException(ex);
+    }
+  }
+
+  private Rental saveRental(Rental rental) {
+    try {
+      return rentalRepository.save(rental);
+    } catch (Exception ex) {
+      throw new DatabaseException(ex);
+    }
   }
 }
