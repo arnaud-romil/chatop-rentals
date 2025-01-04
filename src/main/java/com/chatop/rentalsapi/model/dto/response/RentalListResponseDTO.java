@@ -4,13 +4,13 @@ import java.util.List;
 
 public class RentalListResponseDTO {
 
-    private final List<RentalResponseDTO> rentals;
+  private final List<RentalResponseDTO> rentals;
 
-    public RentalListResponseDTO(List<RentalResponseDTO> rentals) {
-        this.rentals = rentals;
-    }
+  public RentalListResponseDTO(List<RentalResponseDTO> rentals) {
+    this.rentals = rentals;
+  }
 
-    public List<RentalResponseDTO> getRentals() {
-        return rentals;
-    }
+  public List<RentalResponseDTO> getRentals() {
+    return rentals;
+  }
 }

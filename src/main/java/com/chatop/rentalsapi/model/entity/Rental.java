@@ -1,8 +1,5 @@
 package com.chatop.rentalsapi.model.entity;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,93 +8,98 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.time.Instant;
 
 @Entity
 @Table(name = "rentals")
 public class Rental {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private BigDecimal surface;
-    private BigDecimal price;
-    private String picture;
-    private String description;
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User user;
-    @Column(name = "created_at")
-    private Instant createdAt;
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    public Long getId() {
-        return id;
-    }
+  private String name;
+  private BigDecimal surface;
+  private BigDecimal price;
+  private String picture;
+  private String description;
 
-    public String getName() {
-        return name;
-    }
+  @ManyToOne
+  @JoinColumn(name = "owner_id", nullable = false)
+  private User user;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  @Column(name = "created_at")
+  private Instant createdAt;
 
-    public BigDecimal getSurface() {
-        return surface;
-    }
+  @Column(name = "updated_at")
+  private Instant updatedAt;
 
-    public void setSurface(BigDecimal surface) {
-        this.surface = surface;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getPicture() {
-        return picture;
-    }
+  public BigDecimal getSurface() {
+    return surface;
+  }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
+  public void setSurface(BigDecimal surface) {
+    this.surface = surface;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public BigDecimal getPrice() {
+    return price;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public String getPicture() {
+    return picture;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setPicture(String picture) {
+    this.picture = picture;
+  }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public Instant getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(Instant updatedAt) {
+    this.updatedAt = updatedAt;
+  }
 }

@@ -1,7 +1,5 @@
 package com.chatop.rentalsapi.model.entity;
 
-import java.time.Instant;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,73 +8,78 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.Instant;
 
 @Entity
 @Table(name = "messages")
 public class Message {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @ManyToOne
-    @JoinColumn(name = "rental_id", nullable = false)
-    private Rental rental;
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-    @Column(name = "message")
-    private String value;
-    @Column(name = "created_at")
-    private Instant createdAt;
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    public Long getId() {
-        return id;
-    }
+  @ManyToOne
+  @JoinColumn(name = "rental_id", nullable = false)
+  private Rental rental;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-    public Rental getRental() {
-        return rental;
-    }
+  @Column(name = "message")
+  private String value;
 
-    public void setRental(Rental rental) {
-        this.rental = rental;
-    }
+  @Column(name = "created_at")
+  private Instant createdAt;
 
-    public User getUser() {
-        return user;
-    }
+  @Column(name = "updated_at")
+  private Instant updatedAt;
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getValue() {
-        return value;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setValue(String message) {
-        this.value = message;
-    }
+  public Rental getRental() {
+    return rental;
+  }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
+  public void setRental(Rental rental) {
+    this.rental = rental;
+  }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+  public String getValue() {
+    return value;
+  }
 
+  public void setValue(String message) {
+    this.value = message;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public Instant getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(Instant updatedAt) {
+    this.updatedAt = updatedAt;
+  }
 }
