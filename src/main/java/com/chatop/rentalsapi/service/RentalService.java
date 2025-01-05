@@ -15,8 +15,6 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +27,7 @@ public class RentalService {
   private final Path storageLocation = Paths.get("uploads");
 
   public RentalService(UserService userService, RentalRepository rentalRepository) {
+
     this.userService = userService;
     this.rentalRepository = rentalRepository;
   }
@@ -43,27 +42,13 @@ public class RentalService {
     rental.setName(rentalCreation.getName());
     rental.setSurface(rentalCreation.getSurface());
     rental.setPrice(rentalCreation.getPrice());
-    rental.setPicture(picturePath);
+    rental.setPicture("/uploads/" + picturePath);
     rental.setDescription(rentalCreation.getDescription());
     rental.setUser(user);
     rental.setCreatedAt(now);
     rental.setUpdatedAt(now);
 
     return saveRental(rental);
-  }
-
-  public Resource servePicture(String fileName) {
-    Resource result = null;
-    try {
-      Path filePath = storageLocation.resolve(fileName);
-      Resource resource = new UrlResource(filePath.toUri());
-      if ((resource.exists() && resource.isReadable())) {
-        result = resource;
-      }
-    } catch (Exception ex) {
-      result = null;
-    }
-    return result;
   }
 
   public RentalListResponseDTO findAllRentals() {

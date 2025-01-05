@@ -13,6 +13,4 @@ public class ValidationErrorResponseDTO {
   public List<FieldErrorDTO> getErrors() {
     return errors;
   }
-
-  
 }

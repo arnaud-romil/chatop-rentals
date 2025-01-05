@@ -16,10 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.Optional;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,14 +57,8 @@ public class RentalController {
   public ResponseEntity<MessageResponseDTO> create(
       @Valid @ModelAttribute RentalCreationRequestDTO rentalCreation,
       Authentication authentication) {
-    ResponseEntity<MessageResponseDTO> result;
-    Rental rental = rentalService.createRental(rentalCreation, authentication.getName());
-    if (rental != null) {
-      result = ResponseEntity.ok().body(new MessageResponseDTO("Rental created !"));
-    } else {
-      result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-    return result;
+    rentalService.createRental(rentalCreation, authentication.getName());
+    return ResponseEntity.ok().body(new MessageResponseDTO("Rental created !"));
   }
 
   @PutMapping(
@@ -148,32 +139,5 @@ public class RentalController {
   public ResponseEntity<RentalListResponseDTO> getAllRentals() {
     RentalListResponseDTO rentals = rentalService.findAllRentals();
     return ResponseEntity.ok().body(rentals);
-  }
-
-  @GetMapping("/pictures/{fileName}")
-  @Operation(
-      summary = "Get picture of a rental",
-      description = "Returns the picture of a rental",
-      responses = {
-        @ApiResponse(responseCode = "200", description = "Picture found"),
-        @ApiResponse(responseCode = "404", description = "Picture not found", content = @Content())
-      })
-  public ResponseEntity<Resource> servePicture(
-      @Parameter(description = "Name of the file for the rental picture.") @PathVariable
-          String fileName) {
-    ResponseEntity<Resource> result;
-    Resource resource = rentalService.servePicture(fileName);
-    if (resource != null) {
-      result =
-          ResponseEntity.ok()
-              .header(
-                  HttpHeaders.CONTENT_DISPOSITION,
-                  "attachment; filename=\"" + resource.getFilename() + "\"")
-              .contentType(MediaType.IMAGE_JPEG)
-              .body(resource);
-    } else {
-      result = ResponseEntity.notFound().build();
-    }
-    return result;
   }
 }
