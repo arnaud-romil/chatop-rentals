@@ -37,10 +37,7 @@ public class RentalResponseDTO {
   }
 
   private String buildPictureLink(String picturePath) {
-    return ServletUriComponentsBuilder.fromCurrentContextPath()
-        .path("/rentals/pictures/")
-        .path(picturePath)
-        .toUriString();
+    return ServletUriComponentsBuilder.fromCurrentContextPath().path(picturePath).toUriString();
   }
 
   public Long getId() {

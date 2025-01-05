@@ -45,11 +45,7 @@ public class MessageController {
       security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<MessageResponseDTO> createMessage(
       @Valid @RequestBody MessageCreationRequestDTO messageCreationRequest) {
-    try {
-      messageService.createMessage(messageCreationRequest);
-      return ResponseEntity.ok().body(new MessageResponseDTO("Message send with success"));
-    } catch (Exception ex) {
-      return ResponseEntity.badRequest().build();
-    }
+    messageService.createMessage(messageCreationRequest);
+    return ResponseEntity.ok().body(new MessageResponseDTO("Message send with success"));
   }
 }
