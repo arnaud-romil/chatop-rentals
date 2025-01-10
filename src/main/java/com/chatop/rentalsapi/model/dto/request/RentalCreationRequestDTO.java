@@ -13,8 +13,8 @@ public class RentalCreationRequestDTO {
   @NotBlank private String name;
   @NotNull @Positive private BigDecimal surface;
   @NotNull @Positive private BigDecimal price;
-  private MultipartFile picture;
-  private String description;
+  @NotNull private MultipartFile picture;
+  @NotBlank private String description;
 
   public String getName() {
     return name;

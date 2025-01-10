@@ -14,8 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.Optional;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,14 +69,8 @@ public class AuthController {
             content = @Content())
       })
   public ResponseEntity<TokenResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
-    ResponseEntity<TokenResponseDTO> result;
-    Optional<User> user = userService.login(loginRequest);
-    if (user.isPresent()) {
-      result = ResponseEntity.ok(jwtService.generateToken(user.get()));
-    } else {
-      result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-    return result;
+    User user = userService.login(loginRequest);
+    return ResponseEntity.ok(jwtService.generateToken(user));
   }
 
   @GetMapping("/me")
@@ -97,13 +89,7 @@ public class AuthController {
       },
       security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<UserResponseDTO> me(Authentication authentication) {
-    ResponseEntity<UserResponseDTO> result;
     User user = userService.findByEmail(authentication.getName());
-    if (user != null) {
-      result = ResponseEntity.ok().body(new UserResponseDTO(user));
-    } else {
-      result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-    return result;
+    return ResponseEntity.ok().body(new UserResponseDTO(user));
   }
 }
