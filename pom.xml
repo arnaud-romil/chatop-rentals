@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.chatop</groupId>
 	<artifactId>rentals-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>rentals-api</name>
 	<description>Renatls API</description>
 	<url/>
