@@ -2,6 +2,7 @@ package com.chatop.rentalsapi.service;
 
 import com.chatop.rentalsapi.exception.DatabaseException;
 import com.chatop.rentalsapi.exception.PictureUploadException;
+import com.chatop.rentalsapi.exception.UserUnauthorizedException;
 import com.chatop.rentalsapi.model.dto.request.RentalCreationRequestDTO;
 import com.chatop.rentalsapi.model.dto.request.RentalUpdateRequestDTO;
 import com.chatop.rentalsapi.model.dto.response.RentalListResponseDTO;
@@ -60,24 +61,29 @@ public class RentalService {
     Rental rental = null;
     User owner = userService.findByEmail(ownerEmail);
     Optional<Rental> rentalOptional = findByIdAndUserId(id, owner.getId());
-    if (rentalOptional.isPresent()) {
-      rental = rentalOptional.get();
-      rental.setName(rentalUpdate.getName());
-      rental.setSurface(rentalUpdate.getSurface());
-      rental.setPrice(rentalUpdate.getPrice());
-      rental.setDescription(rentalUpdate.getDescription());
-      rental.setUpdatedAt(Instant.now());
-      rental = saveRental(rental);
+    if (rentalOptional.isEmpty()) {
+      throw new UserUnauthorizedException("User is unauthorized to update rental");
     }
+
+    rental = rentalOptional.get();
+    rental.setName(rentalUpdate.getName());
+    rental.setSurface(rentalUpdate.getSurface());
+    rental.setPrice(rentalUpdate.getPrice());
+    rental.setDescription(rentalUpdate.getDescription());
+    rental.setUpdatedAt(Instant.now());
+    rental = saveRental(rental);
+
     return rental;
   }
 
-  public Optional<Rental> findById(Long rentalId) {
+  public Rental findById(Long rentalId) {
+    Optional<Rental> rentalOptional;
     try {
-      return rentalRepository.findById(rentalId);
+      rentalOptional = rentalRepository.findById(rentalId);
     } catch (Exception ex) {
       throw new DatabaseException(ex);
     }
+    return rentalOptional.orElseThrow(() -> new UserUnauthorizedException("Rental not found"));
   }
 
   private String storePicture(MultipartFile picture) {

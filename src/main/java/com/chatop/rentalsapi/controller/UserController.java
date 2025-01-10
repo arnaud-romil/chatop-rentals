@@ -10,8 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Optional;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,13 +44,7 @@ public class UserController {
       security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<UserResponseDTO> getUser(
       @Parameter(description = "ID of the requested user") @PathVariable Long userId) {
-    ResponseEntity<UserResponseDTO> result;
-    Optional<User> userOptional = userService.findById(userId);
-    if (userOptional.isPresent()) {
-      result = ResponseEntity.ok().body(new UserResponseDTO(userOptional.get()));
-    } else {
-      result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-    return result;
+    User user = userService.findById(userId);
+    return ResponseEntity.ok().body(new UserResponseDTO(user));
   }
 }

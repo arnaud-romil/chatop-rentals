@@ -1,14 +1,13 @@
 package com.chatop.rentalsapi.service;
 
 import com.chatop.rentalsapi.exception.DatabaseException;
-import com.chatop.rentalsapi.exception.InvalidDataException;
+import com.chatop.rentalsapi.exception.UserUnauthorizedException;
 import com.chatop.rentalsapi.model.dto.request.MessageCreationRequestDTO;
 import com.chatop.rentalsapi.model.entity.Message;
 import com.chatop.rentalsapi.model.entity.Rental;
 import com.chatop.rentalsapi.model.entity.User;
 import com.chatop.rentalsapi.repository.MessageRepository;
 import java.time.Instant;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,29 +24,23 @@ public class MessageService {
     this.rentalService = rentalService;
   }
 
-  public void createMessage(MessageCreationRequestDTO messageCreationRequest) {
+  public void createMessage(MessageCreationRequestDTO messageCreationRequest, String caller) {
 
     final Instant now = Instant.now();
-    Optional<User> userOptional = userService.findById(messageCreationRequest.getUserId());
-    Optional<Rental> rentalOptional = rentalService.findById(messageCreationRequest.getRentalId());
-    if (userOptional.isPresent() && rentalOptional.isPresent()) {
-      Message message = new Message();
-      message.setValue(messageCreationRequest.getMessage());
-      message.setUser(userOptional.get());
-      message.setRental(rentalOptional.get());
-      message.setCreatedAt(now);
-      message.setUpdatedAt(now);
-      saveMessage(message);
-    } else {
-      StringBuilder errorMessage = new StringBuilder("Could not find:");
-      if (userOptional.isEmpty()) {
-        errorMessage.append(" - user with id: " + messageCreationRequest.getUserId());
-      }
-      if (rentalOptional.isEmpty()) {
-        errorMessage.append(" - rental with id: " + messageCreationRequest.getRentalId());
-      }
-      throw new InvalidDataException(errorMessage.toString());
+    Rental rental = rentalService.findById(messageCreationRequest.getRentalId());
+    User user = userService.findById(messageCreationRequest.getUserId());
+
+    if (!user.getEmail().equals(caller)) {
+      throw new UserUnauthorizedException("User is unauthorized to send message");
     }
+
+    Message message = new Message();
+    message.setValue(messageCreationRequest.getMessage());
+    message.setUser(user);
+    message.setRental(rental);
+    message.setCreatedAt(now);
+    message.setUpdatedAt(now);
+    saveMessage(message);
   }
 
   private Message saveMessage(Message message) {

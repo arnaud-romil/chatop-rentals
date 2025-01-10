@@ -15,8 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.Optional;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,15 +81,8 @@ public class RentalController {
       @Valid @ModelAttribute RentalUpdateRequestDTO rentalUpdate,
       @Parameter(description = "ID of the rental to update.") @PathVariable Long id,
       Authentication authentication) {
-    ResponseEntity<MessageResponseDTO> result;
-    Rental rental = rentalService.updateRental(rentalUpdate, id, authentication.getName());
-    if (rental != null) {
-      result = ResponseEntity.ok().body(new MessageResponseDTO("Rental updated !"));
-    } else {
-      result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    return result;
+    rentalService.updateRental(rentalUpdate, id, authentication.getName());
+    return ResponseEntity.ok().body(new MessageResponseDTO("Rental updated !"));
   }
 
   @GetMapping("/{id}")
@@ -111,14 +102,8 @@ public class RentalController {
       security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<RentalResponseDTO> getRental(
       @Parameter(description = "ID of the requested rental") @PathVariable Long id) {
-    ResponseEntity<RentalResponseDTO> result;
-    Optional<Rental> rentalOptional = rentalService.findById(id);
-    if (rentalOptional.isPresent()) {
-      result = ResponseEntity.ok().body(new RentalResponseDTO(rentalOptional.get()));
-    } else {
-      result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-    return result;
+    Rental rental = rentalService.findById(id);
+    return ResponseEntity.ok().body(new RentalResponseDTO(rental));
   }
 
   @GetMapping

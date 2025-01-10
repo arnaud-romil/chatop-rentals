@@ -2,6 +2,7 @@ package com.chatop.rentalsapi.service;
 
 import com.chatop.rentalsapi.exception.DatabaseException;
 import com.chatop.rentalsapi.exception.InvalidDataException;
+import com.chatop.rentalsapi.exception.UserUnauthorizedException;
 import com.chatop.rentalsapi.model.dto.request.LoginRequestDTO;
 import com.chatop.rentalsapi.model.dto.request.RegisterRequestDTO;
 import com.chatop.rentalsapi.model.entity.User;
@@ -34,31 +35,33 @@ public class UserService {
     return saveUser(user);
   }
 
-  public Optional<User> login(LoginRequestDTO loginRequest) {
-    Optional<User> result;
+  public User login(LoginRequestDTO loginRequest) {
     User user = findByEmail(loginRequest.getEmail());
     if (user != null && isPasswordCorrect(user, loginRequest)) {
-      result = Optional.of(user);
+      return user;
     } else {
-      result = Optional.empty();
+      throw new UserUnauthorizedException("Login failed");
     }
-    return result;
   }
 
   public User findByEmail(String email) {
+    Optional<User> userOptional;
     try {
-      return userRepository.findByEmail(email);
+      userOptional = this.userRepository.findByEmail(email);
     } catch (Exception ex) {
       throw new DatabaseException(ex);
     }
+    return userOptional.orElseThrow(() -> new UserUnauthorizedException("User not found by email"));
   }
 
-  public Optional<User> findById(Long userId) {
+  public User findById(Long userId) {
+    Optional<User> userOptional;
     try {
-      return this.userRepository.findById(userId);
+      userOptional = this.userRepository.findById(userId);
     } catch (Exception ex) {
       throw new DatabaseException(ex);
     }
+    return userOptional.orElseThrow(() -> new UserUnauthorizedException("User not found by id"));
   }
 
   private User saveUser(User user) {
