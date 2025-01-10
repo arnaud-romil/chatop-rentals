@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: rentals-api
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: none
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB    
+
+jwt:
+ private.key: classpath:app.key
+ public.key: classpath:app.pub
+
+server:
+  port: 3001
+  servlet:
+    contextPath: /api       
